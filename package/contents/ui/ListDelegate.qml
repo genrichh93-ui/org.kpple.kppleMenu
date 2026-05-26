@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.2
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Layouts
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.plasmoid
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
 Item {
     id: item
@@ -34,44 +34,39 @@ Item {
     Layout.fillWidth: true
     height: row.height
 
+    Rectangle {
+        anchors.fill: parent
+        color: Kirigami.Theme.highlightColor
+        visible: area.containsMouse
+        radius: 3
+    }
+
     MouseArea {
         id: area
         anchors.fill: parent
         hoverEnabled: true
         onClicked: item.clicked()
-        // detect the mouse on the item
-        onContainsMouseChanged: {
-            
-            if (!highlight) {
-                return
-            }
-            
-            if (area.containsMouse) {
-                highlight.parent = item
-                highlight.width = item.width
-                highlight.height = item.height
-            }
-            // if the mouse is in the area, the condition will return a bool "true" to >> highlight.visible
-            highlight.visible = area.containsMouse
-        }
     }
 
     RowLayout {
         id: row
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 0
 
         // set space before the text item with a empty icon
         Item {
             id: emptySpace
-            Layout.minimumWidth: 1 * units.gridUnit
-            Layout.maximumWidth: 1 * units.gridUnit
+            Layout.minimumWidth: 1 * Kirigami.Units.gridUnit
+            Layout.maximumWidth: 1 * Kirigami.Units.gridUnit
         }
 
-        Item {
-            height: 24
-            PlasmaComponents.Label {
-                id: label
-                anchors.fill: parent
-            }
+        PlasmaComponents.Label {
+            id: label
+            Layout.fillWidth: true
+            Layout.preferredHeight: 24
+            color: area.containsMouse ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }

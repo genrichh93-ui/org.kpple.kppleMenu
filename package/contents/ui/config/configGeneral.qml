@@ -16,18 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.2
-import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.kde.kirigami 2.4 as Kirigami
-
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kquickcontrolsaddons 2.0 as KQuickAddons
-import org.kde.draganddrop 2.0 as DragDrop
-import QtQuick.Dialogs 1.2
-
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.core as PlasmaCore
+import org.kde.iconthemes as KIconThemes
+import org.kde.draganddrop as DragDrop
+import org.kde.ksvg as KSvg
 
 
 Item {
@@ -55,7 +52,7 @@ Item {
     Kirigami.FormLayout {
 
         RowLayout {
-            spacing: units.smallSpacing
+            spacing: Kirigami.Units.smallSpacing
 
             Label {
                 text: i18n("Icon:")
@@ -63,9 +60,9 @@ Item {
 
             Button {
                 id: iconButton
-                Layout.minimumWidth: previewFrame.width + units.smallSpacing * 2
+                Layout.minimumWidth: previewFrame.width + Kirigami.Units.smallSpacing * 2
                 Layout.maximumWidth: Layout.minimumWidth
-                Layout.minimumHeight: previewFrame.height + units.smallSpacing * 2
+                Layout.minimumHeight: previewFrame.height + Kirigami.Units.smallSpacing * 2
                 Layout.maximumHeight: Layout.minimumWidth
 
                 DragDrop.DropArea {
@@ -100,7 +97,7 @@ Item {
                     }
                 }
 
-                KQuickAddons.IconDialog {
+                KIconThemes.IconDialog {
                     id: iconDialog
 
                     function setCustomButtonImage(image) {
@@ -113,46 +110,38 @@ Item {
 
                 // just to provide some visual feedback, cannot have checked without checkable enabled
                 checkable: true
-                checked: dropArea.containsAcceptableDrag
-                onClicked: {
-                    checked = Qt.binding(function() { // never actually allow it being checked
-                        return iconMenu.status === PlasmaComponents.DialogStatus.Open || dropArea.containsAcceptableDrag;
-                    })
+                checked: iconMenu.opened || dropArea.containsAcceptableDrag
+                onClicked: iconMenu.open()
 
-                    iconMenu.open(0, height)
-                }
-
-                PlasmaCore.FrameSvgItem {
+                KSvg.FrameSvgItem {
                     id: previewFrame
                     anchors.centerIn: parent
                     imagePath: plasmoid.location === PlasmaCore.Types.Vertical || plasmoid.location === PlasmaCore.Types.Horizontal
                             ? "widgets/panel-background" : "widgets/background"
-                    width: units.iconSizes.large + fixedMargins.left + fixedMargins.right
-                    height: units.iconSizes.large + fixedMargins.top + fixedMargins.bottom
+                    width: Kirigami.Units.iconSizes.large + fixedMargins.left + fixedMargins.right
+                    height: Kirigami.Units.iconSizes.large + fixedMargins.top + fixedMargins.bottom
 
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         anchors.centerIn: parent
-                        width: units.iconSizes.large
+                        width: Kirigami.Units.iconSizes.large
                         height: width
                         source: cfg_useCustomButtonImage ? cfg_customButtonImage : cfg_icon
                     }
                 }
             }
 
-            // QQC Menu can only be opened at cursor position, not a random one
-            PlasmaComponents.ContextMenu {
+            Menu {
                 id: iconMenu
-                visualParent: iconButton
 
-                PlasmaComponents.MenuItem {
+                MenuItem {
                     text: i18nc("@item:inmenu Open icon chooser dialog", "Choose...")
-                    icon: "document-open-folder"
-                    onClicked: iconDialog.open()
+                    icon.name: "document-open-folder"
+                    onTriggered: iconDialog.open()
                 }
-                PlasmaComponents.MenuItem {
+                MenuItem {
                     text: i18nc("@item:inmenu Reset icon to default", "Clear Icon")
-                    icon: "edit-clear"
-                    onClicked: {
+                    icon.name: "edit-clear"
+                    onTriggered: {
                         cfg_useCustomButtonImage = false;
                     }
                 }

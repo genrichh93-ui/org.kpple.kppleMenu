@@ -26,28 +26,28 @@
       <default>kinfocenter</default>
     </entry>
     <entry name="systemPreferencesSettings" type="String">
-      <default>systemsettings5</default>
+      <default>systemsettings</default>
     </entry>
     <entry name="appStoreSettings" type="String">
       <default>plasma-discover</default>
     </entry>
     <entry name="forceQuitSettings" type="String">
-      <default>xkill</default>
+      <default>qdbus6 org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "Kill Window"</default>
     </entry>
     <entry name="sleepSettings" type="String">
       <default>systemctl suspend</default>
     </entry>
     <entry name="restartSettings" type="String">
-      <default>/sbin/reboot</default>
+      <default>qdbus6 org.kde.Shutdown /Shutdown org.kde.Shutdown.logoutAndReboot</default>
     </entry>
     <entry name="shutDownSettings" type="String">
-      <default>/sbin/shutdown now</default>
+      <default>qdbus6 org.kde.Shutdown /Shutdown org.kde.Shutdown.logoutAndShutdown</default>
     </entry>
     <entry name="lockScreenSettings" type="String">
-      <default>qdbus org.freedesktop.ScreenSaver /ScreenSaver Lock</default>
+      <default>loginctl lock-session</default>
     </entry>
     <entry name="logOutSettings" type="String">
-      <default>qdbus org.kde.ksmserver /KSMServer logout 0 0 0</default>
+      <default>qdbus6 org.kde.Shutdown /Shutdown org.kde.Shutdown.logout</default>
     </entry>
   </group>
   

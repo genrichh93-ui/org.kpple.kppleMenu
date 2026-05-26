@@ -53,7 +53,7 @@ msgstr "Ausloggen"
 
 #: ../contents/config/config.qml
 msgid "Advanced"
-msgstr "Fortgeschrittene"
+msgstr "Erweitert"
 
 #: ../contents/config/config.qml
 msgid "Help"
@@ -89,7 +89,7 @@ msgstr "Beenden erzwingen :"
 
 #: ../contents/ui/config/configGeneral.qml
 msgid "Sleep :"
-msgstr "Aussetzen der Aktivität :"
+msgstr "Ruhezustand :"
 
 #: ../contents/ui/config/configGeneral.qml
 msgid "Restart :"
@@ -97,7 +97,7 @@ msgstr "Neustart :"
 
 #: ../contents/ui/config/configGeneral.qml
 msgid "Shut Down :"
-msgstr "Schalte aus :"
+msgstr "Herunterfahren :"
 
 #: ../contents/ui/config/configGeneral.qml
 msgid "Lock Screen :"

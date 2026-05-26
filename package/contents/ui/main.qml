@@ -16,24 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.2
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.plasmoid
+import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
-Item {
+PlasmoidItem {
     id: root
     
     // define exec system ( call commands ) : by Uswitch applet! 
-    PlasmaCore.DataSource {
+    Plasma5Support.DataSource {
         id: executable
         engine: "executable"
         connectedSources: []
         property var callbacks: ({})
-        onNewData: {
+        onNewData: (sourceName, data) => {
             var stdout = data["stdout"]
 
             if (callbacks[sourceName] !== undefined) {
@@ -53,30 +54,34 @@ Item {
         signal exited(string sourceName, string stdout)
     }
         
-    Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
-    Plasmoid.compactRepresentation: null
-    Plasmoid.fullRepresentation: Item {
+    preferredRepresentation: compactRepresentation
+    compactRepresentation: null
+    fullRepresentation: Item {
         id: fullRoot
         
-        readonly property double iwSize: units.gridUnit * 12.6 // item width 
-        readonly property double shSize: 1.1 // separator height
+        readonly property double iwSize: Kirigami.Units.gridUnit * 12.6 // item width 
+        readonly property double shSize: 1.0 // separator height
         
         // config var
-        readonly property string aboutThisComputerCMD: plasmoid.configuration.aboutThisComputerSettings
-        readonly property string systemPreferencesCMD: plasmoid.configuration.systemPreferencesSettings
-        readonly property string appStoreCMD: plasmoid.configuration.appStoreSettings
-        readonly property string forceQuitCMD: plasmoid.configuration.forceQuitSettings
-        readonly property string sleepCMD: plasmoid.configuration.sleepSettings
-        readonly property string restartCMD: plasmoid.configuration.restartSettings
-        readonly property string shutDownCMD: plasmoid.configuration.shutDownSettings
-        readonly property string lockScreenCMD: plasmoid.configuration.lockScreenSettings
-        readonly property string logOutCMD: plasmoid.configuration.logOutSettings
+        readonly property string aboutThisComputerCMD: Plasmoid.configuration.aboutThisComputerSettings
+        readonly property string systemPreferencesCMD: Plasmoid.configuration.systemPreferencesSettings
+        readonly property string appStoreCMD: Plasmoid.configuration.appStoreSettings
+        readonly property string forceQuitCMD: Plasmoid.configuration.forceQuitSettings
+        readonly property string sleepCMD: Plasmoid.configuration.sleepSettings
+        readonly property string restartCMD: Plasmoid.configuration.restartSettings
+        readonly property string shutDownCMD: Plasmoid.configuration.shutDownSettings
+        readonly property string lockScreenCMD: Plasmoid.configuration.lockScreenSettings
+        readonly property string logOutCMD: Plasmoid.configuration.logOutSettings
         
         Layout.preferredWidth: iwSize
         Layout.preferredHeight: aboutThisComputerItem.height * 11 // not the best way to code..
+        Layout.minimumWidth: iwSize
+        Layout.maximumWidth: iwSize
+        Layout.minimumHeight: aboutThisComputerItem.height * 11
+        Layout.maximumHeight: aboutThisComputerItem.height * 11
         
-        // define highlight
-        PlasmaComponents.Highlight {
+        // define dummy highlight to preserve backward compatibility without modifying all delegates
+        Item {
             id: delegateHighlight
             visible: false
         }
@@ -103,7 +108,8 @@ Item {
                 contentItem: Rectangle {
                     implicitWidth: iwSize
                     implicitHeight: shSize
-                    color: "#1E000000"
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.1
                 }
             }
             
@@ -133,7 +139,8 @@ Item {
                 contentItem: Rectangle {
                     implicitWidth: iwSize
                     implicitHeight: shSize
-                    color: "#1E000000"
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.1
                 }
             }
             
@@ -160,7 +167,8 @@ Item {
                 contentItem: Rectangle {
                     implicitWidth: iwSize
                     implicitHeight: shSize
-                    color: "#1E000000"
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.1
                 }
             }
             
@@ -199,7 +207,8 @@ Item {
                 contentItem: Rectangle {
                     implicitWidth: iwSize
                     implicitHeight: shSize
-                    color: "#1E000000"
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.1
                 }
             }
             
@@ -235,7 +244,7 @@ Item {
         }
     }
 
-    Plasmoid.icon: plasmoid.configuration.useCustomButtonImage ? plasmoid.configuration.customButtonImage : plasmoid.configuration.icon
+    Plasmoid.icon: Plasmoid.configuration.useCustomButtonImage ? Plasmoid.configuration.customButtonImage : Plasmoid.configuration.icon
 
 
 } // end item
